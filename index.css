@@ -1,0 +1,41 @@
+body {
+    background: lightgrey;
+}
+
+div {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 400px;
+}
+
+.main-content {
+    background: white;
+    max-width: 420px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 95;
+}
+
+.outline {
+  stroke: rgba(0,0,0,0.1);
+  stroke-width: 0.2;
+  fill: rgba(0,0,0,0);
+}
+
+.outlineHighlight {
+  stroke: rgba(255,0,0,1);
+  stroke-width: 3;
+  fill: rgba(0,0,0,0);
+}
+
+.point {
+  stroke: rgba(0,0,0,1);
+  stroke-width: 1;
+  fill: rgba(0,0,0,0.2);
+}
+
+.pointHighlight {
+  stroke: rgba(0,0,0,1);
+  stroke-width: 1;
+  fill: rgba(255,0,0,1);
+}
