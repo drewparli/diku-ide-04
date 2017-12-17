@@ -214,6 +214,10 @@ function visualize(data) {
                 .attr("class", "pointHighlight")
             d3.select(outline_id(i))
                 .attr("class", "outlineHighlight")
+            // create the tooltip label
+			scatter.append("title")
+                .attr("id", "tooltip")
+                .text("Datafile row index: " + i)
         })
         .on("mouseout", function(d,i) {
             console.log(d,i)
@@ -221,6 +225,7 @@ function visualize(data) {
                 .attr("class", "point")
             d3.select(outline_id(i))
                 .attr("class", "outline")
+			scatter.select("#tooltip").remove()
         })
 
     svg.append("g")
