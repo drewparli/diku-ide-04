@@ -6,6 +6,7 @@ function main(handsJSON)
 }
 
 function visualize(data) {
+    console.log(data)
 
     n_hands = 40
     n_points = 56
@@ -72,6 +73,7 @@ function visualize(data) {
         .attr("height", 320)
         .call(d3.zoom().on("zoom", handel_outline_zoom))
         .on("mousedown.zoom", null)
+        .on("dblclick.zoom", null)
 
     outlines = svg.append("g")
         .attr("id", "outlines")
@@ -94,17 +96,39 @@ function visualize(data) {
                 .attr("x1", next_point)
                 .attr("x2", next_point)
 
+            var currentClass = d3.select(point_id(x)).attr("class")
+            var nextClass = d3.select(point_id(next)).attr("class")
+
             // highlight the next outline and point
-            d3.select(outline_id(next))
-                .attr("class", "outlineHighlight")
-            d3.select(point_id(next))
-                .attr("class", "pointHighlight")
+            if (nextClass != "pointSelected") {
+                d3.select(outline_id(next))
+                    .attr("class", "outlineHighlight")
+                d3.select(point_id(next))
+                    .attr("class", "pointHighlight")
+
+                // need to update the point data for the next outline
+                d3.select("#vis-outline-points")
+                    .select(`#op${x}`)
+                    .remove()
+
+                d3.select("#vis-outline-points")
+                    .append("div")
+                    .attr("id", `op${next}`)
+                    .selectAll("p")
+                    .data(data.outlines.points[next])
+                    .enter()
+                    .append("p")
+                    .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
+                }
 
             // un-highlight the previous outline and point
+            if (currentClass != "pointSelected") {
             d3.select(outline_id(x))
                 .attr("class", "outline")
             d3.select(point_id(x))
                 .attr("class", "point")
+            }
 
         } else if ((nav_d == "dec" && x != 0)) {
 
@@ -115,17 +139,39 @@ function visualize(data) {
                 .attr("x1", prev_point)
                 .attr("x2", prev_point)
 
+            var currentClass = d3.select(point_id(x)).attr("class")
+            var prevClass = d3.select(point_id(prev)).attr("class")
+
             // highlight the next outline and point
-            d3.select(outline_id(prev))
-                .attr("class", "outlineHighlight")
-            d3.select(point_id(prev))
-                .attr("class", "pointHighlight")
+            if (prevClass != "pointSelected") {
+                d3.select(outline_id(prev))
+                    .attr("class", "outlineHighlight")
+                d3.select(point_id(prev))
+                    .attr("class", "pointHighlight")
+
+                // need to update the point data for the next outline
+                d3.select("#vis-outline-points")
+                    .select(`#op${x}`)
+                    .remove()
+
+                d3.select("#vis-outline-points")
+                    .append("div")
+                    .attr("id", `op${prev}`)
+                    .selectAll("p")
+                    .data(data.outlines.points[prev])
+                    .enter()
+                    .append("p")
+                    .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
+            }
 
             // un-highlight the previous outline and point
+            if (currentClass != "pointSelected") {
             d3.select(outline_id(x))
                 .attr("class", "outline")
             d3.select(point_id(x))
                 .attr("class", "point")
+            }
 
         } else {null}
     }
@@ -144,8 +190,22 @@ function visualize(data) {
         .enter()
         .append("path")
         .attr("id", function(d,i) {return "o" + i})
-        .attr("class", "outline")
+        .attr("class", function(d,i) {
+            if (i == nav_begin) {return "outlineHighlight"} else {return "outline"}
+        })
         .attr("d", function(d) {return d})
+
+
+    // Add the current hand's outline points
+    d3.select("#vis-outline-points")
+        .append("div")
+        .attr("id", `op${nav_begin}`)
+        .selectAll("p")
+        .data(data.outlines.points[nav_begin])
+        .enter()
+        .append("p")
+        .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
 
 
     // Initialize the visualization's navigation bar
@@ -154,8 +214,8 @@ function visualize(data) {
         .attr("width", nav_width)
         .attr("height", nav_height)
         .call(d3.zoom().on("zoom", handel_outline_zoom))
-        .on("mousedown.zoom", null)  // need to diable for panning
-
+        .on("mousedown.zoom", null)  // need to disable panning
+        .on("dblclick.zoom", null)  // nuud to disable double click zoom in
 
     nav.append("g")
         .attr("id", "xNavAxis")
@@ -179,53 +239,80 @@ function visualize(data) {
 
     // SCATTER PLOT VIS
     var xScalePCA = d3.scaleLinear()
-        .domain([0.85, 1.2])
+        .domain([-0.55, 0.65])
         .range([0, 380])
         .nice()
 
     var yScalePCA = d3.scaleLinear()
-        .domain([0.85, 1.2])
+        .domain([-0.55, 0.65])
         .range([0, 380])
         .nice()
 
 
     svg = d3.select("#vis-scatter-plot")
         .attr("width", 400)
-        .attr("height", 250)
+        .attr("height", 400)
         .call(d3.zoom().on("zoom", handel_outline_zoom))
         .on("mousedown.zoom", null)
+        .on("dblclick.zoom", null)
 
     scatter = svg.append("g")
         .attr("id", "scatter-plot")
-        // .attr("transform", "translate (150, 125) scale(1)")
 
-    scatter.selectAll("polyline")
+    scatter.selectAll("circle")
         .data(data.components.circles)
         .enter()
-        .append("circle")
+        .append("svg:circle")
         .attr("id", function(d,i) {return "p" + i})
-        .attr("class", "point")
+        .attr("class", function(d,i) {
+            if (i == nav_begin) {return "pointHighlight"} else {return "point"}
+        })
         .attr("cx", function(d) {return xScalePCA(d.cx)})
         .attr("cy", function(d) {return yScalePCA(d.cy)})
         .attr("r", 4)
+        // allow user to highlight points and outlines as they mouse over them
         .on("mouseover", function(d,i) {
-            console.log(d,i)
-            d3.select(point_id(i))
-                .attr("class", "pointHighlight")
-            d3.select(outline_id(i))
-                .attr("class", "outlineHighlight")
+            console.log(data.outlines.points[i])
+
+            var currentClass = d3.select(point_id(i)).attr("class")
+            if (currentClass == "point") {
+                d3.select(point_id(i))
+                    .attr("class", "pointHover")
+                d3.select(outline_id(i))
+                    .attr("class", "outlineHover")
+            }
             // create the tooltip label
             scatter.append("title")
                 .attr("id", "tooltip")
                 .text("Datafile row index: " + i)
         })
         .on("mouseout", function(d,i) {
-            console.log(d,i)
-            d3.select(point_id(i))
-                .attr("class", "point")
-            d3.select(outline_id(i))
-                .attr("class", "outline")
+            var currentClass = d3.select(point_id(i)).attr("class")
+            if (currentClass == "pointHover") {
+                d3.select(point_id(i))
+                    .attr("class", "point")
+                d3.select(outline_id(i))
+                    .attr("class", "outline")
+            }
+            // remove tooltip label
             scatter.select("#tooltip").remove()
+        })
+
+        // allow user to select/deselect points directly
+        .on("mousedown", function(d,i) {
+            var currentClass = d3.select(point_id(i)).attr("class")
+            console.log(currentClass)
+            if (currentClass != "pointSelected") {
+                d3.select(point_id(i))
+                    .attr("class", "pointSelected")
+                d3.select(outline_id(i))
+                    .attr("class", "outlineSelected")
+            } else {
+                d3.select(point_id(i))
+                    .attr("class", "point")
+                d3.select(outline_id(i))
+                    .attr("class", "outline")
+            }
         })
 
     svg.append("g")

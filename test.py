@@ -4,9 +4,14 @@ import pandas as pd
 
 def component_raw(data):
     res = []
+    extremes = []
     for row in data.values:
-        temp = np.round(row, 6)
+        temp = np.round(row, 4)
+        extremes.append(np.min(temp))
+        extremes.append(np.max(temp))
         res.append(temp.tolist())
+    print "Min-Max Range for the PCA data"
+    print np.min(extremes), np.max(extremes)
     return res
 
 def component_circles(data):
@@ -20,12 +25,16 @@ def component_circles(data):
 
 def outline_points(data):
     res = []
+    extremes = []
     for row in data.values:
-        temp = np.round(row, 6).tolist()
-        print np.max(temp), np.min(temp)
+        temp = np.round(row, 4).tolist()
+        extremes.append(np.max(temp))
+        extremes.append(np.min(temp))
         xs = temp[:56]
         ys = temp[56:]
         res.append(zip(xs, ys))
+    print "Min-Max Range for the Outline point data:"
+    print np.min(extremes), np.max(extremes)
     return res
 
 def outline_paths(point_arrs):
@@ -55,8 +64,8 @@ if __name__ == '__main__':
     data["outlines"]["paths"] = outline_paths(data["outlines"]["points"])
 
     data["components"] = dict()
-    data["components"]["raw"] = component_raw(hands)
-    data["components"]["circles"] = component_circles(hands)
+    data["components"]["raw"] = component_raw(pca)
+    data["components"]["circles"] = component_circles(pca)
 
     # print json.dumps(data["outlines"]["points"])
     with open("hands.json", "w") as f:

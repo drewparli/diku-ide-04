@@ -24,7 +24,19 @@ div {
 
 .outlineHighlight {
   stroke: rgba(255,0,0,1);
-  stroke-width: 3;
+  stroke-width: 1;
+  fill: rgba(0,0,0,0);
+}
+
+.outlineHover {
+  stroke: cornflowerblue;
+  stroke-width: 1;
+  fill: rgba(0,0,0,0);
+}
+
+.outlineSelected {
+  stroke: darkred;
+  stroke-width: 2;
   fill: rgba(0,0,0,0);
 }
 
@@ -37,5 +49,24 @@ div {
 .pointHighlight {
   stroke: rgba(0,0,0,1);
   stroke-width: 1;
-  fill: rgba(255,0,0,1);
+  fill: rgba(255, 0, 0, 1);
+}
+
+.pointHover {
+  stroke: rgba(0,0,0,1);
+  stroke-width: 1;
+  fill: cornflowerblue;
+}
+
+.pointSelected {
+  stroke: rgba(0,0,0,1);
+  stroke-width: 1;
+  fill: darkred;
+}
+
+#vis-outline-points p {
+  font-size: 7.5pt;
+  font-family: monospace;
+  line-height: 8.5pt;
+  margin: 0 0 0 0;
 }
