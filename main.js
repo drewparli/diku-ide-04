@@ -99,27 +99,26 @@ function visualize(data) {
             var currentClass = d3.select(point_id(x)).attr("class")
             var nextClass = d3.select(point_id(next)).attr("class")
 
+            // need to update the point data for the next outline
+            d3.select("#vis-outline-points")
+                .select(`#op${x}`)
+                .remove()
+
+            d3.select("#vis-outline-points")
+                .append("div")
+                .attr("id", `op${next}`)
+                .selectAll("p")
+                .data(data.outlines.points[next])
+                .enter()
+                .append("p")
+                .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
             // highlight the next outline and point
             if (nextClass != "pointSelected") {
                 d3.select(outline_id(next))
                     .attr("class", "outlineHighlight")
                 d3.select(point_id(next))
                     .attr("class", "pointHighlight")
-
-                // need to update the point data for the next outline
-                d3.select("#vis-outline-points")
-                    .select(`#op${x}`)
-                    .remove()
-
-                d3.select("#vis-outline-points")
-                    .append("div")
-                    .attr("id", `op${next}`)
-                    .selectAll("p")
-                    .data(data.outlines.points[next])
-                    .enter()
-                    .append("p")
-                    .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
-
                 }
 
             // un-highlight the previous outline and point
@@ -142,27 +141,26 @@ function visualize(data) {
             var currentClass = d3.select(point_id(x)).attr("class")
             var prevClass = d3.select(point_id(prev)).attr("class")
 
+            // need to update the point data for the next outline
+            d3.select("#vis-outline-points")
+                .select(`#op${x}`)
+                .remove()
+
+            d3.select("#vis-outline-points")
+                .append("div")
+                .attr("id", `op${prev}`)
+                .selectAll("p")
+                .data(data.outlines.points[prev])
+                .enter()
+                .append("p")
+                .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
             // highlight the next outline and point
             if (prevClass != "pointSelected") {
                 d3.select(outline_id(prev))
                     .attr("class", "outlineHighlight")
                 d3.select(point_id(prev))
                     .attr("class", "pointHighlight")
-
-                // need to update the point data for the next outline
-                d3.select("#vis-outline-points")
-                    .select(`#op${x}`)
-                    .remove()
-
-                d3.select("#vis-outline-points")
-                    .append("div")
-                    .attr("id", `op${prev}`)
-                    .selectAll("p")
-                    .data(data.outlines.points[prev])
-                    .enter()
-                    .append("p")
-                    .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
-
             }
 
             // un-highlight the previous outline and point
