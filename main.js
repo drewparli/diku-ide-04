@@ -284,7 +284,7 @@ function visualize(data) {
 
     svg = d3.select("#vis-scatter-plot")
         .attr("width", 300)
-        .attr("height", 250)
+        .attr("height", 260)
         .call(d3.zoom().on("zoom", handel_outline_zoom))
         .on("mousedown.zoom", null)
         .on("dblclick.zoom", null)
