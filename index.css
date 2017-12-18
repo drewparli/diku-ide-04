@@ -2,15 +2,14 @@ body {
     background: lightgrey;
 }
 
-div {
+/*div {
   margin-right: auto;
   margin-left: auto;
   max-width: 400px;
-}
+}*/
 
 .main-content {
-    background: white;
-    max-width: 420px;
+    max-width: 550px;
     margin-right: auto;
     margin-left: auto;
     width: 95;
@@ -64,9 +63,62 @@ div {
   fill: darkred;
 }
 
-#vis-outline-points p {
+#vis-outlines-details {
+  background: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
+  float: left;
+}
+
+#vis-outlines-details p {
   font-size: 7.5pt;
   font-family: monospace;
   line-height: 8.5pt;
-  margin: 0 0 0 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#vis-outlines {
+  background: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+
+#vis-nav {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+
+#vis-scatter-plot {
+  background: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+
+#vis-scatter-plot-details {
+  background: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 2px;
+  float: left;
+  font-size: 7.5pt;
+  font-family: monospace;
+  line-height: 16pt;
+  width: 300px;
 }

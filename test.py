@@ -18,8 +18,9 @@ def component_circles(data):
     res = []
     for row in data.values:
         entry = dict()
-        entry["cx"] = row[0]
-        entry["cy"] = row[1]
+        temp = np.round(row, 4)
+        entry["cx"] = temp[0]
+        entry["cy"] = temp[1]
         res.append(entry)
     return res
 

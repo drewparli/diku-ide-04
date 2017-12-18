@@ -13,12 +13,12 @@ function visualize(data) {
 
     var xOutlineScale = d3.scaleLinear()
         .domain([0.1, 1.3])
-        .range([0, 400])
+        .range([0, 300])
         .nice()
 
     var yOutlineScale = d3.scaleLinear()
         .domain([0.1, 1.3])
-        .range([0, 400])
+        .range([0, 300])
         .nice()
 
     /* build a string for each hand's svg:path `d` attribute */
@@ -53,8 +53,8 @@ function visualize(data) {
 
     // default navigation settings
     var nav_begin = 9
-    var nav_width = 400
-    var nav_height = 50
+    var nav_width = 300
+    var nav_height = 30
     var nav_margin_left = 10
     var nav_margin_right = 10
     var nav_num_ticks = 20
@@ -69,8 +69,8 @@ function visualize(data) {
         .ticks(nav_num_ticks)
 
     svg = d3.select("#vis-outlines")
-        .attr("width", 400)
-        .attr("height", 320)
+        .attr("width", 300)
+        .attr("height", 240)
         .call(d3.zoom().on("zoom", handel_outline_zoom))
         .on("mousedown.zoom", null)
         .on("dblclick.zoom", null)
@@ -100,11 +100,11 @@ function visualize(data) {
             var nextClass = d3.select(point_id(next)).attr("class")
 
             // need to update the point data for the next outline
-            d3.select("#vis-outline-points")
+            d3.select("#vis-outlines-details")
                 .select(`#op${x}`)
                 .remove()
 
-            d3.select("#vis-outline-points")
+            d3.select("#vis-outlines-details")
                 .append("div")
                 .attr("id", `op${next}`)
                 .selectAll("p")
@@ -112,6 +112,24 @@ function visualize(data) {
                 .enter()
                 .append("p")
                 .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
+            d3.select("#sp1")
+                .select(`#spcx${x}`)
+                .remove()
+            d3.select("#sp2")
+                .select(`#spcy${x}`)
+                .remove()
+
+            d3.select("#sp1")
+                .append("span")
+                .attr("id", `spcx${next}`)
+                .text(data.components.circles[next].cx)
+            d3.select("#sp2")
+                .append("span")
+                .attr("id", `spcy${next}`)
+                .text(data.components.circles[next].cy)
+
+
 
             // highlight the next outline and point
             if (nextClass != "pointSelected") {
@@ -142,11 +160,11 @@ function visualize(data) {
             var prevClass = d3.select(point_id(prev)).attr("class")
 
             // need to update the point data for the next outline
-            d3.select("#vis-outline-points")
+            d3.select("#vis-outlines-details")
                 .select(`#op${x}`)
                 .remove()
 
-            d3.select("#vis-outline-points")
+            d3.select("#vis-outlines-details")
                 .append("div")
                 .attr("id", `op${prev}`)
                 .selectAll("p")
@@ -154,6 +172,23 @@ function visualize(data) {
                 .enter()
                 .append("p")
                 .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
+
+            d3.select("#sp1")
+                .select(`#spcx${x}`)
+                .remove()
+            d3.select("#sp2")
+                .select(`#spcy${x}`)
+                .remove()
+
+            d3.select("#sp1")
+                .append("span")
+                .attr("id", `spcx${prev}`)
+                .text(data.components.circles[prev].cx)
+            d3.select("#sp2")
+                .append("span")
+                .attr("id", `spcy${prev}`)
+                .text(data.components.circles[prev].cy)
+
 
             // highlight the next outline and point
             if (prevClass != "pointSelected") {
@@ -195,7 +230,7 @@ function visualize(data) {
 
 
     // Add the current hand's outline points
-    d3.select("#vis-outline-points")
+    d3.select("#vis-outlines-details")
         .append("div")
         .attr("id", `op${nav_begin}`)
         .selectAll("p")
@@ -237,19 +272,19 @@ function visualize(data) {
 
     // SCATTER PLOT VIS
     var xScalePCA = d3.scaleLinear()
-        .domain([-0.55, 0.65])
-        .range([0, 380])
+        .domain([-0.51, 0.63])
+        .range([0, 290])
         .nice()
 
     var yScalePCA = d3.scaleLinear()
-        .domain([-0.55, 0.65])
-        .range([0, 380])
+        .domain([-0.51, 0.63])
+        .range([0, 290])
         .nice()
 
 
     svg = d3.select("#vis-scatter-plot")
-        .attr("width", 400)
-        .attr("height", 400)
+        .attr("width", 300)
+        .attr("height", 250)
         .call(d3.zoom().on("zoom", handel_outline_zoom))
         .on("mousedown.zoom", null)
         .on("dblclick.zoom", null)
@@ -318,6 +353,42 @@ function visualize(data) {
 
     svg.append("g")
         .attr("id", "yAxisScatter")
+
+    d3.select("#vis-scatter-plot-details")
+        .selectAll("#sp1")
+        .data(["1st Principal Component: "])
+        .enter()
+        .append("div")
+        .attr("id", "sp1")
+        .append("span")
+        .text(function(d) {return d})
+
+    d3.select("#sp1")
+        .append("span")
+        .attr("id", `spcx${nav_begin}`)
+        .text(`${data.components.circles[nav_begin].cx}`)
+
+
+    d3.select("#vis-scatter-plot-details")
+        .selectAll("#sp2")
+        .data(["2st Principal Component: "])
+        .enter()
+        .append("div")
+        .attr("id", "sp2")
+        .append("span")
+        .text(function(d) {return d})
+
+    d3.select("#sp2")
+        .append("span")
+        .attr("id", `spcy${nav_begin}`)
+        .text(`${data.components.circles[nav_begin].cy}`)
+
+
+    // coords.append("text")
+    //     .text("x-coord")
+
+    // coords.append("text")
+    //     .text("y-coord")
 }
 
 
