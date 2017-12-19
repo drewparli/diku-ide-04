@@ -267,7 +267,6 @@ function visualize(data) {
         .style("stroke-width", 2)
 
 
-
     // SCATTER PLOT VIS
     var xScalePCA = d3.scaleLinear()
         .domain([-0.51, 0.63])
@@ -278,7 +277,6 @@ function visualize(data) {
         .domain([-0.51, 0.63])
         .range([0, 290])
         .nice()
-
 
     svg = d3.select("#vis-scatter-plot")
         .attr("width", 300)
@@ -397,7 +395,6 @@ function visualize(data) {
         .append("span")
         .attr("id", `spcy${nav_begin}`)
         .text(`${data.components.circles[set][nav_begin].cy}`)
-
 
     d3.select("#vis-scatter-plot-details")
         .append("button")
