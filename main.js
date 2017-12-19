@@ -226,6 +226,14 @@ function visualize(data) {
         else {return "dec"}
     }
 
+    function redraw_comp(set) {
+        scatter = d3.select("#vis-scatter-plot")
+		    .selectAll("circle")
+		    .transition()           // apply a transition
+            .duration(900)         // apply it over 4000 milliseconds
+            .attr('cx', function(d, i) {return xScalePCA(data.components.circles[set][i].cx)})
+		    .attr('cy', function(d, i) {return yScalePCA(data.components.circles[set][i].cy)});  
+    }
 
     outlines.selectAll("path")
         .data(data.outlines.paths)
@@ -392,6 +400,19 @@ function visualize(data) {
         .text(`${data.components.circles[set][nav_begin].cy}`)
         // .text(`${data.components.circles[nav_begin].cy}`)
 
+	d3.select("#vis-scatter-plot-details")
+		.append("input")
+		.attr("id", "btn_pca_12")
+		.attr("type", "button")
+		.attr("value", "PCA 1 - 2")
+		.attr("onclick", redraw_comp(0))
+		
+    d3.select("#vis-scatter-plot-details")
+		.append("input")
+		.attr("id", "btn_pca_13")
+		.attr("type", "button")
+		.attr("value", "PCA 1 - 3")
+		.attr("onclick", redraw_comp(1))
     // coords.append("text")
     //     .text("x-coord")
 
