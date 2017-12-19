@@ -177,3 +177,11 @@ p {
   margin-right: auto;
   margin-left: auto;
 }
+
+.compSet {
+  background-color: grey;
+}
+
+.compSetSelected {
+  background-color: white;
+}
