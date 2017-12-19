@@ -6,7 +6,7 @@ function main(handsJSON)
 }
 
 function visualize(data) {
-    console.log(data)
+    //console.log(data)
 
     n_hands = 40
     n_points = 56
@@ -268,7 +268,7 @@ function visualize(data) {
 
 
 
-    console.log(data.components.circles)
+    //console.log(data.components.circles)
 
     // SCATTER PLOT VIS
     var xScalePCA = d3.scaleLinear()
@@ -305,7 +305,7 @@ function visualize(data) {
         .attr("r", 4)
         // allow user to highlight points and outlines as they mouse over them
         .on("mouseover", function(d,i) {
-            console.log(data.outlines.points[i])
+            //console.log(data.outlines.points[i])
 
             var currentClass = d3.select(point_id(i)).attr("class")
             if (currentClass == "point") {
@@ -334,17 +334,30 @@ function visualize(data) {
         // allow user to select/deselect points directly
         .on("mousedown", function(d,i) {
             var currentClass = d3.select(point_id(i)).attr("class")
-            console.log(currentClass)
-            if (currentClass != "pointSelected") {
+            if (currentClass != "pointsSelected") {
+                /* get a color and apply it to data point */
+                var color = (unused_colors.length > 0) ? unused_colors.pop() : "black";
+
                 d3.select(point_id(i))
-                    .attr("class", "pointSelected")
+                    .attr("style", "fill: " + color)
+                    .attr("value", color)
+                    .attr("class", "pointsSelected")
                 d3.select(outline_id(i))
+                    .attr("style", "stroke:" + color)
                     .attr("class", "outlineSelected")
             } else {
+                /* Add color back to unused colors pool */
+                var color = d3.select(point_id(i)).attr("value")
+                if (color != "black")
+                  unused_colors.push(color);
+
                 d3.select(point_id(i))
                     .attr("class", "point")
+                    .attr("style", null)
+                    .attr("value", null)
                 d3.select(outline_id(i))
                     .attr("class", "outline")
+                    .attr("style", null)
             }
         })
 
@@ -383,15 +396,88 @@ function visualize(data) {
         .attr("id", `spcy${nav_begin}`)
         .text(`${data.components.circles[nav_begin].cy}`)
 
+    /* Rectangular selection support */
 
-    // coords.append("text")
-    //     .text("x-coord")
+    function rect(x, y, w, h) {
+        return "M"+[x,y]+" l"+[w,0]+" l"+[0,h]+" l"+[-w,0]+"z";
+    }
 
-    // coords.append("text")
-    //     .text("y-coord")
+    var rec_box = d3.select("#vis-scatter-plot");
+
+    var selection = rec_box.append("path")
+        .attr("class", "selection")
+        .attr("visibility", "hidden");
+
+    var startSelection = function(start) {
+        selection.attr("d", rect(start[0], start[1], 0, 0))
+            .attr("visibility", "visible");
+    };
+
+    var moveSelection = function(start, moved) {
+        selection.attr("d", rect(start[0], start[1], moved[0]-start[0], moved[1]-start[1]));
+    };
+
+    var endSelection = function(start, end) {
+        selection.attr("visibility", "hidden");
+        d3.selectAll(".point")
+          .filter(function() {
+               var cx = d3.select(this).attr("cx"), cy = d3.select(this).attr("cy")
+               return (start[0] < cx && cx < end[0] && start[1] < cy && cy < end[1])
+           })
+          .each(function(d) {
+            var currentClass = d3.select(this).attr("class")
+            var i = d3.select(this).attr("id").substring(1)
+
+            if (currentClass != "pointsSelected") {
+                /* get a color and apply it to data point */
+                var color = (unused_colors.length > 0) ? unused_colors.pop() : "black";
+
+                d3.select(point_id(i))
+                    .attr("style", "fill: " + color)
+                    .attr("value", color)
+                    .attr("class", "pointsSelected")
+                d3.select(outline_id(i))
+                    .attr("style", "stroke:" + color)
+                    .attr("class", "outlineSelected")
+          }})
+    };
+
+    rec_box.on("mousedown", function() {
+        var subject = rec_box, start = d3.mouse(this);
+            startSelection(start);
+            subject
+                .on("mousemove.selection", function() {
+                    moveSelection(start, d3.mouse(this));
+                }).on("mouseup.selection", function() {
+                    endSelection(start, d3.mouse(this));
+                    subject.on("mousemove.selection", null).on("mouseup.selection", null);
+          });
+    });
+
+    rec_box.on("touchstart", function() {
+      var subject = d3.select(this), parent = this.parentNode,
+          id = d3.event.changedTouches[0].identifier,
+          start = d3.touch(parent, id), pos;
+        startSelection(start);
+        subject
+          .on("touchmove."+id, function() {
+            if (pos = d3.touch(parent, id)) {
+              moveSelection(start, pos);
+            }
+          }).on("touchend."+id, function() {
+            if (pos = d3.touch(parent, id)) {
+              endSelection(start, pos);
+              subject.on("touchmove."+id, null).on("touchend."+id, null);
+            }
+          });
+    });
+
+
 }
-
 
 /* These functions return properly formatted id strings for the integer x */
 function point_id(x) { return `#p${x}` }
 function outline_id(x) { return `#o${x}` }
+
+/* Global color pool */
+var unused_colors = ["blue","purple","yellow","green","orange"];

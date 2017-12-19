@@ -61,7 +61,7 @@ p {
 }
 
 .outlineHover {
-  stroke: cornflowerblue;
+  stroke: slategrey;
   stroke-width: 1;
   fill: rgba(0,0,0,0);
 }
@@ -87,13 +87,22 @@ p {
 .pointHover {
   stroke: rgba(0,0,0,0.5);
   stroke-width: 1;
-  fill: cornflowerblue;
+  fill: slategrey;
 }
 
 .pointSelected {
   stroke: rgba(0,0,0,1);
   stroke-width: 1;
   fill: darkred;
+}
+
+.selection {
+  fill: #ADD8E6;
+  stroke: #ADD8E6;
+  fill-opacity: 0.3;
+  stroke-opacity: 0.7;
+  stroke-width: 2;
+  stroke-dasharray: 5, 5;
 }
 
 #vis-outlines-details {
@@ -135,10 +144,7 @@ p {
 
 #vis-scatter-plot {
   background: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  margin: 10px;
   float: left;
 }
 
