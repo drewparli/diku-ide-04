@@ -400,21 +400,20 @@ function visualize(data) {
 
 	d3.select("#vis-scatter-plot-details")
 		.append("button")
-        .append("id", "b0")
 		.attr("class", "compSetSelected")
-        .text("PCA 1-2")
+        .text("PCA 1 - 2")
         .attr("value", 0)
 		.on("mousedown", handle_trans)
 
     d3.select("#vis-scatter-plot-details")
         .append("button")
-        .attr("id", "b1")
         .attr("class", "compSet")
-        .text("PCA 1-3")
+        .text("PCA 1 - 3")
         .attr("value", 1)
         .on("mousedown", handle_trans)
 
     function handle_trans() {
+        // console.log("This", this.value)
 
         redraw_comp(this.value)
     }
