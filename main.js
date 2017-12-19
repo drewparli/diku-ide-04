@@ -6,7 +6,7 @@ function main(handsJSON)
 }
 
 function visualize(data) {
-    console.log(data)
+    //console.log(data)
 
     n_hands = 40
     n_points = 56
@@ -277,8 +277,6 @@ function visualize(data) {
 
 
 
-    // console.log(data.components.circles)
-
     // SCATTER PLOT VIS
     var xScalePCA = d3.scaleLinear()
         .domain([-0.51, 0.63])
@@ -315,8 +313,6 @@ function visualize(data) {
 
         // allow user to highlight points and outlines as they mouse over them
         .on("mouseover", function(d,i) {
-            // console.log("D", d)
-            // console.log("scatter", scatter)
 
             var currentClass = d3.select(point_id(i)).attr("class")
             if (currentClass == "point") {
@@ -349,17 +345,31 @@ function visualize(data) {
         // allow user to select/deselect points directly
         .on("mousedown", function(d,i) {
             var currentClass = d3.select(point_id(i)).attr("class")
-            // console.log(currentClass)
-            if (currentClass != "pointSelected") {
+
+            if (currentClass != "pointsSelected") {
+                /* get a color and apply it to data point */
+                var color = (unused_colors.length > 0) ? unused_colors.pop() : "black";
+
                 d3.select(point_id(i))
-                    .attr("class", "pointSelected")
+                    .attr("style", "fill: " + color)
+                    .attr("value", color)
+                    .attr("class", "pointsSelected")
                 d3.select(outline_id(i))
+                    .attr("style", "stroke:" + color)
                     .attr("class", "outlineSelected")
             } else {
+                /* Add color back to unused colors pool */
+                var color = d3.select(point_id(i)).attr("value")
+                if (color != "black")
+                  unused_colors.push(color);
+
                 d3.select(point_id(i))
                     .attr("class", "point")
+                    .attr("style", null)
+                    .attr("value", null)
                 d3.select(outline_id(i))
                     .attr("class", "outline")
+                    .attr("style", null)
             }
         })
 
@@ -398,12 +408,20 @@ function visualize(data) {
         .text(`${data.components.circles[set][nav_begin].cy}`)
 
 
+<<<<<<< HEAD
 	d3.select("#vis-scatter-plot-details")
 		.append("button")
 		.attr("class", "compSetSelected")
         .text("PCA 1 - 2")
+=======
+  d3.select("#vis-scatter-plot-details")
+    .append("button")
+        .append("id", "b0")
+    .attr("class", "compSetSelected")
+        .text("PCA 1-2")
+>>>>>>> e8204034f7f7bda5e0cd42bc2e5e9cdf4ef73503
         .attr("value", 0)
-		.on("mousedown", handle_trans)
+    .on("mousedown", handle_trans)
 
     d3.select("#vis-scatter-plot-details")
         .append("button")
@@ -430,13 +448,92 @@ function visualize(data) {
             .duration(900)         // apply it over 4000 milliseconds
             .attr('cy', function(d, i) {return yScalePCA(data.components.circles[s][i].cy)})
     }
-}
 
+    /* Rectangular selection support */
+
+    function rect(x, y, w, h) {
+        return "M"+[x,y]+" l"+[w,0]+" l"+[0,h]+" l"+[-w,0]+"z";
+    }
+
+    var rec_box = d3.select("#vis-scatter-plot");
+
+    var selection = rec_box.append("path")
+        .attr("class", "selection")
+        .attr("visibility", "hidden");
+
+    var startSelection = function(start) {
+        selection.attr("d", rect(start[0], start[1], 0, 0))
+            .attr("visibility", "visible");
+    };
+
+    var moveSelection = function(start, moved) {
+        selection.attr("d", rect(start[0], start[1], moved[0]-start[0], moved[1]-start[1]));
+    };
+
+    var endSelection = function(start, end) {
+        selection.attr("visibility", "hidden");
+        d3.selectAll(".point")
+          .filter(function() {
+               var cx = d3.select(this).attr("cx"), cy = d3.select(this).attr("cy")
+               return (start[0] < cx && cx < end[0] && start[1] < cy && cy < end[1])
+           })
+          .each(function(d) {
+            var currentClass = d3.select(this).attr("class")
+            var i = d3.select(this).attr("id").substring(1)
+
+            if (currentClass != "pointsSelected") {
+                /* get a color and apply it to data point */
+                var color = (unused_colors.length > 0) ? unused_colors.pop() : "black";
+
+                d3.select(point_id(i))
+                    .attr("style", "fill: " + color)
+                    .attr("value", color)
+                    .attr("class", "pointsSelected")
+                d3.select(outline_id(i))
+                    .attr("style", "stroke:" + color)
+                    .attr("class", "outlineSelected")
+          }})
+    };
+
+    rec_box.on("mousedown", function() {
+        var subject = rec_box, start = d3.mouse(this);
+            startSelection(start);
+            subject
+                .on("mousemove.selection", function() {
+                    moveSelection(start, d3.mouse(this));
+                }).on("mouseup.selection", function() {
+                    endSelection(start, d3.mouse(this));
+                    subject.on("mousemove.selection", null).on("mouseup.selection", null);
+          });
+    });
+
+    rec_box.on("touchstart", function() {
+      var subject = d3.select(this), parent = this.parentNode,
+          id = d3.event.changedTouches[0].identifier,
+          start = d3.touch(parent, id), pos;
+        startSelection(start);
+        subject
+          .on("touchmove."+id, function() {
+            if (pos = d3.touch(parent, id)) {
+              moveSelection(start, pos);
+            }
+          }).on("touchend."+id, function() {
+            if (pos = d3.touch(parent, id)) {
+              endSelection(start, pos);
+              subject.on("touchmove."+id, null).on("touchend."+id, null);
+            }
+          });
+    });
+
+
+}
 
 /* These functions return properly formatted id strings for the integer x */
 function point_id(x) { return `#p${x}` }
 function outline_id(x) { return `#o${x}` }
 
+/* Global color pool */
+var unused_colors = ["blue","purple","yellow","green","orange"];
 
 /* This function is taken directly from https://bl.ocks.org/mbostock/3916621 */
 function pathTween(d1, precision) {
