@@ -113,6 +113,7 @@ function visualize(data) {
                 .append("p")
                 .text(function(d,i) { return `x${i} = ${d[0].toFixed(4)}, y${i} = ${d[1].toFixed(4)}` })
 
+            // need to update the component data for the PCA visualization
             d3.select("#sp1")
                 .select(`#spcx${x}`)
                 .remove()
@@ -130,19 +131,26 @@ function visualize(data) {
                 .text(data.components.circles[next].cy)
 
 
+            d3.select(outline_id(next))
+                .transition()
+                .duration(1000)
+                .on("start", function(d) {
+                    d3.active(this)
+                        .attrTween("d", pathTween(data.outlines.paths[next], 4))
+                })
 
             // highlight the next outline and point
             if (nextClass != "pointSelected") {
-                d3.select(outline_id(next))
-                    .attr("class", "outlineHighlight")
+                // d3.select(outline_id(next))
+                //     .attr("class", "outlineHighlight")
                 d3.select(point_id(next))
                     .attr("class", "pointHighlight")
                 }
 
             // un-highlight the previous outline and point
             if (currentClass != "pointSelected") {
-            d3.select(outline_id(x))
-                .attr("class", "outline")
+            // d3.select(outline_id(x))
+            //     .attr("class", "outline")
             d3.select(point_id(x))
                 .attr("class", "point")
             }
@@ -192,18 +200,18 @@ function visualize(data) {
 
             // highlight the next outline and point
             if (prevClass != "pointSelected") {
-                d3.select(outline_id(prev))
-                    .attr("class", "outlineHighlight")
+                // d3.select(outline_id(prev))
+                //     .attr("class", "outlineHighlight")
                 d3.select(point_id(prev))
                     .attr("class", "pointHighlight")
             }
 
             // un-highlight the previous outline and point
             if (currentClass != "pointSelected") {
-            d3.select(outline_id(x))
-                .attr("class", "outline")
-            d3.select(point_id(x))
-                .attr("class", "point")
+                // d3.select(outline_id(x))
+                //     .attr("class", "outline")
+                d3.select(point_id(x))
+                    .attr("class", "point")
             }
 
         } else {null}
@@ -395,3 +403,32 @@ function visualize(data) {
 /* These functions return properly formatted id strings for the integer x */
 function point_id(x) { return `#p${x}` }
 function outline_id(x) { return `#o${x}` }
+
+
+/* This function is taken directly from https://bl.ocks.org/mbostock/3916621 */
+function pathTween(d1, precision) {
+  return function() {
+    var path0 = this
+    var path1 = path0.cloneNode()
+    var n0 = path0.getTotalLength()
+    var n1 = (path1.setAttribute("d", d1), path1).getTotalLength()
+
+    console.log(path0, path1)
+
+    // Uniform sampling of distance based on specified precision.
+    var distances = [0], i = 0, dt = precision / Math.max(n0, n1)
+    while ((i += dt) < 1) distances.push(i)
+    distances.push(1)
+
+    // Compute point-interpolators at each distance.
+    var points = distances.map(function(t) {
+      var p0 = path0.getPointAtLength(t * n0)
+      var p1 = path1.getPointAtLength(t * n1)
+      return d3.interpolate([p0.x, p0.y], [p1.x, p1.y])
+    })
+
+    return function(t) {
+      return t < 1 ? "M" + points.map(function(p) { return p(t); }).join("L") : d1
+    }
+  }
+}
