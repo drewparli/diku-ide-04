@@ -10,30 +10,27 @@
   </head>
   <body>
     <div class="main-content">
-      <div class="vis-title"><h1>Visualizing the Spectrum</h1></div>
       <div class="left">
-
-        <div id="vis-outlines-details"><p>Hej</p></div>
-
-        <div><p>Outline of each hand sample</p><svg id="vis-outlines"></svg></div>
-
+        <div id="vis-outlines-details"><div class="vis-subtitle">Hand Points</div></div>
+      </div>
+      <div class="middle">
+        <div><div class="vis-subtitle">Outline of each hand sample</div><svg id="vis-outlines"></svg></div>
         <div><svg id="vis-nav"></svg></div>
-
         <div><svg id="vis-scatter-plot"></svg></div>
-
         <div id="vis-scatter-plot-details"></div>
-
+        <div class="vis-subtitle">Principal Components Scatter Plot</div>
       </div>
       <div class="right">
 
         <div class="vis-text">
-          <h2>Overview</h2>
+          <h2>Visualizing the Spectrum</h2>
           <p>Integer semper, mi quis varius pulvinar, neque justo accumsan urna, et interdum risus ante a enim. Cras sit amet massa mi. Praesent justo augue, venenatis vel tellus eget, interdum volutpat purus. Sed sed ullamcorper ex. Praesent sit amet porttitor turpis. Vestibulum vehicula leo enim, non malesuada est tincidunt ac. Vestibulum accumsan, est eu interdum lobortis, tortor velit feugiat augue, sit amet facilisis est leo ut lorem. Vivamus nisl sem, vestibulum eu tellus sed, volutpat laoreet est. Nunc non cursus lectus, sit amet mollis leo.</p>
         </div>
 
         <div class="vis-text">
           <h2>Andrew</h2>
-          <p>As my interactive extension, I coded the logic that allows the user to explore the dataset by scrolling instead of just hovering over a point. The numbered horizontal line allows the user to see which hand sample is currently shown. </p>
+          <p>I chose to implement a few different interactive extensions. First, I wanted to make it possible for a user to scroll through the dataset. This was acheived using the zoom portion of the d3 library. This lets the viewer quickly flip though the 55 hand samples
+          ve extension, I coded the logic that allows the user to explore the dataset by scrolling instead of just hovering over a point. The numbered horizontal line allows the user to see which hand sample is currently shown. </p>
         </div>
 
         <div class="vis-text">

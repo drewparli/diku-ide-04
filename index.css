@@ -5,51 +5,96 @@ body {
 h1 {
   font-family: sans-serif;
   font-size: 24pt;
-  line-height: 2pt;
-  margin-top: 0px
+  margin-top: 5px
   margin-bottom 0px;
-  text-align: center;
 }
 
 h2 {
   font-family: sans-serif;
-  font-size: 16pt;
-  line-height: 2pt;
-  margin-top: 0px
-  margin-bottom 0px;
+  font-size: 12pt;
+  margin-top: 5px;
 }
-
-p {
-  font-family: sans-serif;
-  font-size: 10pt;
-  line-height: 12pt;
-  margin-top: 0px
-  margin-bottom 0px;
-}
-
 
 .main-content {
-    max-width: 1100px;
+    max-width: 1500px;
     margin-right: auto;
     margin-left: auto;
-    width: 95;
+    width: 90;
 }
 
 .left {
-    padding-top: 10px;
-    width: 550px;
+    background: rgba(0,0,0, 0.1);
+    max-width: 500px;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     float: left;
-    overflow: hidden;
+}
+
+.middle {
+    max-width: 500px;
+    margin-right: 20px;
+    float: left;
 }
 
 .right {
-    width: 550px;
+    max-width: 500px;
     float: left;
-    overflow: hidden;
+}
+
+.vis-text {
+  background: rgba(0,0,0, 0.1);
+  max-width: 500px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.vis-text p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-style: sans-serif;
+  font-size: 10pt;
+  line-height: 12pt;
+}
+
+.vis-text h2 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-style: sans-serif;
+  font-size: 12pt;
+}
+
+.vis-title {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.vis-subtitle {
+  font-size: 9pt;
+  font-family: monospace;
+  line-height: 16pt;
+  margin-bottom: 5px;
+  border-bottom: 1px solid lightgrey;
+  /*text-align: center;*/
+}
+
+.compSet {
+  background-color: rgba(0,0,0, 0.3);
+}
+
+.compSetSelected {
+  background-color: white;
+  border-color: black;
 }
 
 .outline {
-  stroke: rgba(0,0,0,0.1);
+  stroke: rgba(0,0,0,0);
   stroke-width: 0.2;
   fill: rgba(0,0,0,0);
 }
@@ -106,85 +151,53 @@ p {
 }
 
 #vis-outlines-details {
-  background: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-right: 10px;
-  float: left;
 }
 
 #vis-outlines-details p {
   font-size: 7.5pt;
   font-family: monospace;
-  line-height: 8.5pt;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 9.25pt;
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
 #vis-outlines {
   background: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-right: auto;
+  margin-left: auto;
   float: left;
 }
 
 #vis-nav {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
   float: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #vis-scatter-plot {
   background: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
   float: left;
 }
 
 #vis-scatter-plot-details {
   background: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
   margin-top: 1px;
+  margin-bottom: 5px;
   float: left;
-  font-size: 7.5pt;
-  font-family: monospace;
-  line-height: 16pt;
   width: 300px;
 }
 
-.vis-text {
-  background: white;
-  width: 486px;
-  padding: 15px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  float: left;
+#vis-scatter-plot-details span {
+  font-size: 7.5pt;
+  font-family: monospace;
+  line-height: 16pt;
+  margin-left: 10px;
 }
 
-.vis-title {
-  margin-top: 40px;
-  margin-bottom: 40px;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.compSet {
-  background-color: grey;
-}
-
-.compSetSelected {
-  background-color: white;
+#vis-scatter-plot-details button {
+  font-size: 9pt;
+  font-family: monospace;
+  line-height: 16pt;
+  margin-left: 5px;
+  margin-bottom: 5px;
 }
