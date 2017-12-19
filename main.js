@@ -518,19 +518,29 @@ function visualize(data) {
     /*******************
      PCA IN-TEXT EXAMPLE
      *******************/
-    d3.select("#pca-example")
+    d3.select("#pca-example-1")
+        .on("mouseover", handle_pca_example_over)
+        .on("mouseout", handle_pca_example_out)
+
+    d3.select("#pca-example-2")
         .on("mouseover", handle_pca_example_over)
         .on("mouseout", handle_pca_example_out)
 
     function handle_pca_example_over() {
+        let example = this.id.slice(-1)
+
         // turn on outlines 30 and 35, the extreme examples of the first comp
         d3.select("#outlines")
             .selectAll("path")
             .attr("class", function(d, i) {
-                switch (i) {
-                    case 30:
+                switch (example + i) {
+                    case "130":
                         return "outlineEx1"; break;
-                    case 35:
+                    case "135":
+                        return "outlineEx2"; break;
+                    case "237":
+                        return "outlineEx1"; break;
+                    case "239":
                         return "outlineEx2"; break;
                     default:
                         return "outline"
@@ -541,10 +551,14 @@ function visualize(data) {
         d3.select("#scatter-plot")
             .selectAll("circle")
             .attr("class", function(d, i) {
-                switch (i) {
-                    case 30:
+                switch (example + i) {
+                    case "130":
                         return "pointEx1"; break;
-                    case 35:
+                    case "135":
+                        return "pointEx2"; break;
+                    case "237":
+                        return "pointEx1"; break;
+                    case "239":
                         return "pointEx2"; break;
                     default:
                         return "point"
@@ -560,7 +574,7 @@ function visualize(data) {
         let marker = d3.select(".xNavMarker")
         let m = getMarkerId(marker)
 
-        console.log(m)
+        // console.log(m)
 
         // turn off outlines
         d3.select("#outlines")
