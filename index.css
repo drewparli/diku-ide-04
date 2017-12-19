@@ -8,6 +8,7 @@ h1 {
   line-height: 2pt;
   margin-top: 0px
   margin-bottom 0px;
+  text-align: center;
 }
 
 h2 {
@@ -20,18 +21,31 @@ h2 {
 
 p {
   font-family: sans-serif;
-  font-size: 8pt;
-  line-height: 10pt;
+  font-size: 10pt;
+  line-height: 12pt;
   margin-top: 0px
   margin-bottom 0px;
 }
 
 
 .main-content {
-    max-width: 550px;
+    max-width: 1100px;
     margin-right: auto;
     margin-left: auto;
     width: 95;
+}
+
+.left {
+    padding-top: 10px;
+    width: 550px;
+    float: left;
+    overflow: hidden;
+}
+
+.right {
+    width: 550px;
+    float: left;
+    overflow: hidden;
 }
 
 .outline {
@@ -145,18 +159,15 @@ p {
 .vis-text {
   background: white;
   width: 486px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 15px;
   margin-top: 10px;
   margin-bottom: 10px;
   float: left;
 }
 
 .vis-title {
-  width: 486px;
-  margin-top: 10px;
-  margin-left: 10px;
-  float: left;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-right: auto;
+  margin-left: auto;
 }
