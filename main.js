@@ -86,7 +86,7 @@ function visualize(data) {
         let nav_d = navDirection(old_k, k)
 
         var marker = d3.select(".xNavMarker")
-        var x = parseInt(marker.attr("id").slice(1))
+        var x = getMarkerId(marker)
 
         if ((nav_d == "inc") && x != 39) {
 
@@ -515,12 +515,80 @@ function visualize(data) {
           });
     });
 
+    /*******************
+     PCA IN-TEXT EXAMPLE
+     *******************/
+    d3.select("#pca-example")
+        .on("mouseover", handle_pca_example_over)
+        .on("mouseout", handle_pca_example_out)
+
+    function handle_pca_example_over() {
+        // turn on outlines 30 and 35, the extreme examples of the first comp
+        d3.select("#outlines")
+            .selectAll("path")
+            .attr("class", function(d, i) {
+                switch (i) {
+                    case 30:
+                        return "outlineEx1"; break;
+                    case 35:
+                        return "outlineEx2"; break;
+                    default:
+                        return "outline"
+                }
+            })
+
+        // turn on points 30 and 35, the extreme examples of the first comp
+        d3.select("#scatter-plot")
+            .selectAll("circle")
+            .attr("class", function(d, i) {
+                switch (i) {
+                    case 30:
+                        return "pointEx1"; break;
+                    case 35:
+                        return "pointEx2"; break;
+                    default:
+                        return "point"
+                }
+            })
+
+
+
+    }
+
+    function handle_pca_example_out() {
+        // need to know where the navigation marker is
+        let marker = d3.select(".xNavMarker")
+        let m = getMarkerId(marker)
+
+        console.log(m)
+
+        // turn off outlines
+        d3.select("#outlines")
+            .selectAll("path")
+            .attr("class", function(d, i) {
+                if (i == m) {
+                    return "outlineHighlight"
+                } else {return "outline"}
+            })
+
+        // turn off points
+        d3.select("#scatter-plot")
+            .selectAll("circle")
+            .attr("class", function(d, i) {
+                if (i == m) {
+                    return "pointHighlight"
+                } else {return "point"}
+
+            })
+    }
+
 
 }
 
 /* These functions return properly formatted id strings for the integer x */
 function point_id(x) { return `#p${x}` }
 function outline_id(x) { return `#o${x}` }
+function getMarkerId(m) { return parseInt(m.attr("id").slice(1)) }
 
 /* Global color pool */
 var unused_colors = ["blue","purple","yellow","green","orange"];

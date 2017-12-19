@@ -117,6 +117,32 @@ h2 {
   fill: rgba(0,0,0,0);
 }
 
+.outlineEx1 {
+  stroke: darkgreen;
+  stroke-width: 3;
+  fill: rgba(0,0,0,0);
+}
+
+.outlineEx2 {
+  stroke: lightgreen;
+  stroke-width: 3;
+  fill: rgba(0,0,0,0);
+}
+
+.pointEx1 {
+  stroke: rgba(0,0,0,0.5);
+  stroke-width: 1;
+  fill: darkgreen;
+}
+
+.pointEx2 {
+  stroke: rgba(0,0,0,0.5);
+  stroke-width: 1;
+  fill: lightgreen;
+  opacity: 20;
+}
+
+
 .point {
   stroke: rgba(0,0,0,0.5);
   stroke-width: 1;
