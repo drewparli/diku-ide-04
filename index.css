@@ -172,12 +172,10 @@ p {
   margin-left: auto;
 }
 
-.btn_pca_12 {
-  background: red;
-  width: 100px;
-  height: 100px;
+.compSet {
+  background-color: grey;
 }
-.btn_pca_13 {
-  width: 100px;
-  height: 100px;
+
+.compSetSelected {
+  background-color: white;
 }
