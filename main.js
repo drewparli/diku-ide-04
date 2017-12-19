@@ -408,20 +408,12 @@ function visualize(data) {
         .text(`${data.components.circles[set][nav_begin].cy}`)
 
 
-<<<<<<< HEAD
-	d3.select("#vis-scatter-plot-details")
-		.append("button")
-		.attr("class", "compSetSelected")
+    d3.select("#vis-scatter-plot-details")
+        .append("button")
+        .attr("class", "compSetSelected")
         .text("PCA 1 - 2")
-=======
-  d3.select("#vis-scatter-plot-details")
-    .append("button")
-        .append("id", "b0")
-    .attr("class", "compSetSelected")
-        .text("PCA 1-2")
->>>>>>> e8204034f7f7bda5e0cd42bc2e5e9cdf4ef73503
         .attr("value", 0)
-    .on("mousedown", handle_trans)
+        .on("mousedown", handle_trans)
 
     d3.select("#vis-scatter-plot-details")
         .append("button")
