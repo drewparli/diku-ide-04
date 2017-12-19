@@ -14,13 +14,13 @@ def component_raw(data):
     print np.min(extremes), np.max(extremes)
     return res
 
-def component_circles(data):
+def component_circles(data, point1, point2):
     res = []
     for row in data.values:
         entry = dict()
         temp = np.round(row, 4)
-        entry["cx"] = temp[0]
-        entry["cy"] = temp[1]
+        entry["cx"] = temp[point1]
+        entry["cy"] = temp[point2]
         res.append(entry)
     return res
 
@@ -66,7 +66,10 @@ if __name__ == '__main__':
 
     data["components"] = dict()
     data["components"]["raw"] = component_raw(pca)
-    data["components"]["circles"] = component_circles(pca)
+    data["components"]["circles"] = dict()
+	data["components"]["circles"]["set_1_2"] = component_circles(pca, 0, 1)
+	data["components"]["circles"]["set_1_3"] = component_circles(pca, 0, 2)
+	data["components"]["circles"]["set_2_3"] = component_circles(pca, 1, 2)
 
     # print json.dumps(data["outlines"]["points"])
     with open("hands.json", "w") as f:
