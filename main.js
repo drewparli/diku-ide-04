@@ -132,26 +132,26 @@ function visualize(data) {
                 .text(data.components.circles[set][next].cy)
 
 
-            d3.select(outline_id(next))
-                .transition()
-                .duration(1000)
-                .on("start", function(d) {
-                    d3.active(this)
-                        .attrTween("d", pathTween(data.outlines.paths[next], 4))
-                })
+            // d3.select(outline_id(next))
+            //     .transition()
+            //     .duration(1000)
+            //     .on("start", function(d) {
+            //         d3.active(this)
+            //             .attrTween("d", pathTween(data.outlines.paths[next], 4))
+            //     })
 
             // highlight the next outline and point
             if (nextClass != "pointSelected") {
-                // d3.select(outline_id(next))
-                //     .attr("class", "outlineHighlight")
+                d3.select(outline_id(next))
+                    .attr("class", "outlineHighlight")
                 d3.select(point_id(next))
                     .attr("class", "pointHighlight")
                 }
 
             // un-highlight the previous outline and point
             if (currentClass != "pointSelected") {
-            // d3.select(outline_id(x))
-            //     .attr("class", "outline")
+            d3.select(outline_id(x))
+                .attr("class", "outline")
             d3.select(point_id(x))
                 .attr("class", "point")
             }
@@ -201,16 +201,16 @@ function visualize(data) {
 
             // highlight the next outline and point
             if (prevClass != "pointSelected") {
-                // d3.select(outline_id(prev))
-                //     .attr("class", "outlineHighlight")
+                d3.select(outline_id(prev))
+                    .attr("class", "outlineHighlight")
                 d3.select(point_id(prev))
                     .attr("class", "pointHighlight")
             }
 
             // un-highlight the previous outline and point
             if (currentClass != "pointSelected") {
-                // d3.select(outline_id(x))
-                //     .attr("class", "outline")
+                d3.select(outline_id(x))
+                    .attr("class", "outline")
                 d3.select(point_id(x))
                     .attr("class", "point")
             }
@@ -226,14 +226,6 @@ function visualize(data) {
         else {return "dec"}
     }
 
-    function redraw_comp(set) {
-        scatter = d3.select("#vis-scatter-plot")
-		    .selectAll("circle")
-		    .transition()           // apply a transition
-            .duration(900)         // apply it over 4000 milliseconds
-            .attr('cx', function(d, i) {return xScalePCA(data.components.circles[set][i].cx)})
-		    .attr('cy', function(d, i) {return yScalePCA(data.components.circles[set][i].cy)});  
-    }
 
     outlines.selectAll("path")
         .data(data.outlines.paths)
@@ -285,7 +277,7 @@ function visualize(data) {
 
 
 
-    console.log(data.components.circles)
+    // console.log(data.components.circles)
 
     // SCATTER PLOT VIS
     var xScalePCA = d3.scaleLinear()
@@ -320,9 +312,11 @@ function visualize(data) {
         .attr("cx", function(d) {return xScalePCA(d.cx)})
         .attr("cy", function(d) {return yScalePCA(d.cy)})
         .attr("r", 4)
+
         // allow user to highlight points and outlines as they mouse over them
         .on("mouseover", function(d,i) {
-            console.log(data.outlines.points[i])
+            // console.log("D", d)
+            // console.log("scatter", scatter)
 
             var currentClass = d3.select(point_id(i)).attr("class")
             if (currentClass == "point") {
@@ -331,10 +325,13 @@ function visualize(data) {
                 d3.select(outline_id(i))
                     .attr("class", "outlineHover")
             }
+
             // create the tooltip label
-            scatter.append("title")
+            d3.select(point_id(i))
+                .append("title")
                 .attr("id", "tooltip")
                 .text("Datafile row index: " + i)
+
         })
         .on("mouseout", function(d,i) {
             var currentClass = d3.select(point_id(i)).attr("class")
@@ -344,14 +341,15 @@ function visualize(data) {
                 d3.select(outline_id(i))
                     .attr("class", "outline")
             }
+
             // remove tooltip label
-            scatter.select("#tooltip").remove()
+            d3.select("#tooltip").remove()
         })
 
         // allow user to select/deselect points directly
         .on("mousedown", function(d,i) {
             var currentClass = d3.select(point_id(i)).attr("class")
-            console.log(currentClass)
+            // console.log(currentClass)
             if (currentClass != "pointSelected") {
                 d3.select(point_id(i))
                     .attr("class", "pointSelected")
@@ -398,26 +396,39 @@ function visualize(data) {
         .append("span")
         .attr("id", `spcy${nav_begin}`)
         .text(`${data.components.circles[set][nav_begin].cy}`)
-        // .text(`${data.components.circles[nav_begin].cy}`)
+
 
 	d3.select("#vis-scatter-plot-details")
-		.append("input")
+		.append("button")
 		.attr("id", "btn_pca_12")
-		.attr("type", "button")
-		.attr("value", "PCA 1 - 2")
-		.attr("onclick", redraw_comp(0))
-		
-    d3.select("#vis-scatter-plot-details")
-		.append("input")
-		.attr("id", "btn_pca_13")
-		.attr("type", "button")
-		.attr("value", "PCA 1 - 3")
-		.attr("onclick", redraw_comp(1))
-    // coords.append("text")
-    //     .text("x-coord")
+        .text("PCA 1 - 2")
+        .attr("value", 0)
+		.on("mousedown", handle_trans)
 
-    // coords.append("text")
-    //     .text("y-coord")
+    d3.select("#vis-scatter-plot-details")
+        .append("button")
+        .attr("id", "btn_pca_13")
+        .text("PCA 1 - 3")
+        .attr("value", 1)
+        .on("mousedown", handle_trans)
+
+    function handle_trans() {
+        // console.log("This", this.value)
+        redraw_comp(this.value)
+    }
+
+    function redraw_comp(s) {
+        circles = d3.select("#vis-scatter-plot")
+            .selectAll("circle")
+
+        circles.transition()          // apply a transition
+            .duration(900)         // apply it over 4000 milliseconds
+            .attr('cx', function(d, i) {return xScalePCA(data.components.circles[s][i].cx)})
+
+        circles.transition()          // apply a transition
+            .duration(900)         // apply it over 4000 milliseconds
+            .attr('cy', function(d, i) {return yScalePCA(data.components.circles[s][i].cy)})
+    }
 }
 
 
@@ -434,7 +445,7 @@ function pathTween(d1, precision) {
     var n0 = path0.getTotalLength()
     var n1 = (path1.setAttribute("d", d1), path1).getTotalLength()
 
-    console.log(path0, path1)
+    // console.log(path0, path1)
 
     // Uniform sampling of distance based on specified precision.
     var distances = [0], i = 0, dt = precision / Math.max(n0, n1)
