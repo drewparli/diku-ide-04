@@ -384,7 +384,7 @@ function visualize(data) {
 
     d3.select("#vis-scatter-plot-details")
         .selectAll("#sp2")
-        .data(["2st Principal Component: "])
+        .data(["2nd Principal Component: "])
         .enter()
         .append("div")
         .attr("id", "sp2")
@@ -437,6 +437,22 @@ function visualize(data) {
             .duration(900)
             .attr('cy', function(d, i) {return yScalePCA(data.components.circles[s][i].cy)})
 
+		d3.select("#vis-scatter-plot-details")
+            .select("#sp2")
+			.select("span")
+            .text(function() {
+                if (s == 0) {
+                    return ["2nd Principal Component: "]
+                } else {
+					return ["3rd Principal Component: "]
+				}
+			})
+
+		for (i = 0; i < 40; i++) {
+		    d3.select("#sp2")
+		        .selectAll(`#spcy${i}`)
+                .text(`${data.components.circles[s][i].cy}`)
+		}
     }
 
     /* Rectangular selection support */
