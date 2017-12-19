@@ -10,6 +10,7 @@ function visualize(data) {
 
     n_hands = 40
     n_points = 56
+    set = 0
 
     var xOutlineScale = d3.scaleLinear()
         .domain([0.1, 1.3])
@@ -124,11 +125,11 @@ function visualize(data) {
             d3.select("#sp1")
                 .append("span")
                 .attr("id", `spcx${next}`)
-                .text(data.components.circles[next].cx)
+                .text(data.components.circles[set][next].cx)
             d3.select("#sp2")
                 .append("span")
                 .attr("id", `spcy${next}`)
-                .text(data.components.circles[next].cy)
+                .text(data.components.circles[set][next].cy)
 
 
             d3.select(outline_id(next))
@@ -191,11 +192,11 @@ function visualize(data) {
             d3.select("#sp1")
                 .append("span")
                 .attr("id", `spcx${prev}`)
-                .text(data.components.circles[prev].cx)
+                .text(data.components.circles[set][prev].cx)
             d3.select("#sp2")
                 .append("span")
                 .attr("id", `spcy${prev}`)
-                .text(data.components.circles[prev].cy)
+                .text(data.components.circles[set][prev].cy)
 
 
             // highlight the next outline and point
@@ -301,7 +302,7 @@ function visualize(data) {
         .attr("id", "scatter-plot")
 
     scatter.selectAll("circle")
-        .data(data.components.circles)
+        .data(data.components.circles[set])
         .enter()
         .append("svg:circle")
         .attr("id", function(d,i) {return "p" + i})
@@ -374,8 +375,7 @@ function visualize(data) {
     d3.select("#sp1")
         .append("span")
         .attr("id", `spcx${nav_begin}`)
-        .text(`${data.components.circles[nav_begin].cx}`)
-
+        .text(`${data.components.circles[set][nav_begin].cx}`)
 
     d3.select("#vis-scatter-plot-details")
         .selectAll("#sp2")
@@ -389,8 +389,8 @@ function visualize(data) {
     d3.select("#sp2")
         .append("span")
         .attr("id", `spcy${nav_begin}`)
-        .text(`${data.components.circles[nav_begin].cy}`)
-
+        .text(`${data.components.circles[set][nav_begin].cy}`)
+        // .text(`${data.components.circles[nav_begin].cy}`)
 
     // coords.append("text")
     //     .text("x-coord")
