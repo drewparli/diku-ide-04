@@ -43,7 +43,26 @@
 
         <div class="vis-text">
           <h2>Petur</h2>
-          <p>Pellentesque in mollis elit. Cras ac nibh cursus, aliquet nisl porttitor, feugiat eros. Quisque ut blandit urna. Aenean odio sapien, euismod a eros eu, tristique fringilla diam. Curabitur interdum mattis erat, tincidunt euismod metus suscipit et. Curabitur cursus mollis ipsum nec tristique. Sed malesuada ex vel ligula vulputate eleifend. Phasellus eget fermentum sapien, vel sollicitudin urna. Duis eget tortor at arcu pharetra sodales et vel leo. Cras pulvinar quam fringilla, aliquam dolor sed, tincidunt nisl. Sed eros felis, faucibus at nibh finibus, finibus mollis est. Donec aliquet lacus augue, vel pharetra ipsum malesuada ut. </p>
+
+          <p>I added colouring of individual toggled data points and
+          rectangular selection. Using unique colors for data points helps with
+          comparison of smaller sets of data points which have interesting
+          correlations and promotes a richer analysis. The colouring is handled
+          via a global pool of available colours. We decided to include as
+          varied hues as possible while also avoiding using the other
+          highlighting colours we have, like red and grey. To save the viewer
+          from dealing with large sets of selected points with very minor
+          differences in colour between them, we only add color to the first 5
+          points which are selected - the rest of coloured black.</p>
+
+          <p>The selection code is inspired by the solution found in <a
+             href="https://gist.github.com/vwochnik/712c8131afc9b0be7f57a3dde95be47a"
+             target="_blank">this gist</a>. Certain choices made in their code
+           need to be implemented to adapt the solution, but the logic is the
+           same. On the end event, when a selection has been made, the
+           selection window's boundaries are checked and the colouring
+           algorithm from before is employed.</p>
+
         </div>
 
       </div>
